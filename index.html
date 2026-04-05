@@ -1,0 +1,1423 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elizabeth Avila Ricardo | 1st Investment Realty Group - Agente de Bienes Raíces en Florida</title>
+    
+    <meta name="description" content="Elizabeth Avila Ricardo - Agente de bienes raíces en Florida. Compra, venta e inversión en propiedades. Atención profesional bilingüe inglés/español.">
+    <meta name="keywords" content="bienes raíces Florida, agente inmobiliario, comprar casa Florida, vender propiedad, inversión inmobiliaria, Tampa real estate">
+    <meta name="author" content="1st Investment Realty Group">
+    <meta name="language" content="Spanish, English">
+
+    <meta name="theme-color" content="#1B2B4E">
+    
+    
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-oro: #C6A43F;
+            --color-oro-oscuro: #A8882E;
+            --color-azul-profundo: #1B2B4E;
+            --color-azul-claro: #2C3E66;
+            --color-gris: #F5F5F5;
+            --color-texto: #333;
+            --color-blanco: #ffffff;
+            --sombra: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --transicion: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Poppins', 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: var(--color-texto);
+            background-color: var(--color-blanco);
+            overflow-x: hidden;
+        }
+
+        .contenedor {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section {
+            padding: 80px 0;
+        }
+
+        h1, h2, h3 {
+            color: var(--color-azul-profundo);
+            margin-bottom: 20px;
+            line-height: 1.3;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            text-align: center;
+            position: relative;
+            margin-bottom: 50px;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--color-oro);
+            border-radius: 2px;
+        }
+
+        p {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            color: #555;
+        }
+
+        /* Navegación */
+        .navegacion {
+            background: var(--color-blanco);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 15px 0;
+            transition: var(--transicion);
+        }
+
+        .navegacion.scrolled {
+            padding: 10px 0;
+            background: rgba(255, 255, 255, 0.98);
+        }
+
+        .nav-contenedor {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo-icono {
+            font-size: 2rem;
+            color: var(--color-oro);
+        }
+
+        .logo-texto {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--color-azul-profundo);
+        }
+
+        .logo-texto span {
+            color: var(--color-oro);
+            font-size: 1rem;
+            display: block;
+            font-weight: 400;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--color-azul-profundo);
+            font-weight: 500;
+            transition: var(--transicion);
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--color-oro);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--color-oro);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .menu-movil {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--color-azul-profundo);
+            cursor: pointer;
+        }
+
+        /* Botones */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transicion);
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-primario {
+            background: linear-gradient(135deg, var(--color-oro), var(--color-oro-oscuro));
+            color: white;
+            box-shadow: 0 5px 15px rgba(198, 164, 63, 0.3);
+        }
+
+        .btn-primario:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(198, 164, 63, 0.4);
+        }
+
+        .btn-secundario {
+            background: transparent;
+            color: var(--color-oro);
+            border: 2px solid var(--color-oro);
+        }
+
+        .btn-secundario:hover {
+            background: var(--color-oro);
+            color: white;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding-top: 120px;
+            padding-bottom: 80px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 70%;
+            height: 150%;
+            background: linear-gradient(135deg, rgba(198, 164, 63, 0.05), rgba(27, 43, 78, 0.05));
+            transform: rotate(15deg);
+            pointer-events: none;
+        }
+
+        .hero-contenido {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-texto h1 {
+            font-size: 3.2rem;
+            margin-bottom: 20px;
+        }
+
+        .hero-texto .destacado {
+            color: var(--color-oro);
+        }
+
+        .hero-texto .subtitulo {
+            font-size: 1.3rem;
+            color: var(--color-azul-claro);
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .badges {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background: var(--color-azul-profundo);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .hero-imagen {
+            text-align: center;
+        }
+
+        .foto-contenedor {
+            position: relative;
+            width: 380px;
+            height: 380px;
+            margin: 0 auto;
+        }
+
+        .foto-perfil {
+            width: 100%;
+            height: 100%;
+            border-radius: 30px;
+            object-fit: cover;
+            border: 8px solid white;
+            box-shadow: var(--sombra);
+            position: relative;
+            z-index: 2;
+        }
+
+        .foto-marco {
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            right: -15px;
+            bottom: -15px;
+            border-radius: 40px;
+            background: linear-gradient(45deg, var(--color-oro), var(--color-oro-oscuro));
+            z-index: 1;
+        }
+
+        /* Stats */
+        .stats {
+            background: var(--color-azul-profundo);
+            color: white;
+            padding: 50px 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            text-align: center;
+        }
+
+        .stat-item h3 {
+            color: var(--color-oro);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .stat-item p {
+            color: white;
+            margin-bottom: 0;
+        }
+
+        /* Servicios */
+        .servicios-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .servicio-card {
+            background: white;
+            padding: 35px 25px;
+            border-radius: 15px;
+            box-shadow: var(--sombra);
+            text-align: center;
+            transition: var(--transicion);
+            border-bottom: 3px solid transparent;
+        }
+
+        .servicio-card:hover {
+            transform: translateY(-10px);
+            border-bottom-color: var(--color-oro);
+        }
+
+        .servicio-icono {
+            font-size: 3rem;
+            color: var(--color-oro);
+            margin-bottom: 20px;
+        }
+
+        .servicio-card h3 {
+            margin-bottom: 15px;
+        }
+
+        /* Propiedades Destacadas */
+        .propiedades-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .propiedad-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--sombra);
+            transition: var(--transicion);
+        }
+
+        .propiedad-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .propiedad-imagen {
+            height: 220px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .propiedad-precio {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            background: var(--color-oro);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .propiedad-info {
+            padding: 20px;
+        }
+
+        .propiedad-info h3 {
+            margin-bottom: 10px;
+        }
+
+        .propiedad-ubicacion {
+            color: var(--color-oro);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .propiedad-caracteristicas {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            color: #666;
+            font-size: 0.85rem;
+        }
+
+        .propiedad-caracteristicas i {
+            margin-right: 5px;
+            color: var(--color-oro);
+        }
+
+        /* Testimonios */
+        .testimonios-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .testimonio-card {
+            background: var(--color-gris);
+            padding: 30px;
+            border-radius: 15px;
+            position: relative;
+        }
+
+        .testimonio-card::before {
+            content: '"';
+            font-size: 4rem;
+            color: var(--color-oro);
+            opacity: 0.3;
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            font-family: serif;
+        }
+
+        .testimonio-texto {
+            font-style: italic;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimonio-autor {
+            font-weight: 700;
+            color: var(--color-azul-profundo);
+        }
+
+        /* Mapa y Contacto */
+        .contacto-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .info-contacto {
+            background: var(--color-gris);
+            padding: 30px;
+            border-radius: 15px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .info-icono {
+            width: 50px;
+            height: 50px;
+            background: var(--color-azul-profundo);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-oro);
+            font-size: 1.2rem;
+        }
+
+        .info-texto h4 {
+            margin-bottom: 5px;
+            color: var(--color-azul-profundo);
+        }
+
+        .info-texto a, .info-texto p {
+            color: #666;
+            text-decoration: none;
+            transition: var(--transicion);
+        }
+
+        .info-texto a:hover {
+            color: var(--color-oro);
+        }
+
+        #mapa {
+            height: 400px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--sombra);
+        }
+
+        /* Formulario */
+        .form-contacto {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: var(--sombra);
+        }
+
+        .form-grupo {
+            margin-bottom: 20px;
+        }
+
+        .form-grupo label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--color-azul-profundo);
+        }
+
+        .form-grupo input,
+        .form-grupo select,
+        .form-grupo textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: var(--transicion);
+        }
+
+        .form-grupo input:focus,
+        .form-grupo select:focus,
+        .form-grupo textarea:focus {
+            outline: none;
+            border-color: var(--color-oro);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--color-azul-profundo);
+            color: white;
+            padding: 40px 0 20px;
+        }
+
+        .footer-contenido {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .footer-columna h4 {
+            color: var(--color-oro);
+            margin-bottom: 20px;
+        }
+
+        .footer-columna p, .footer-columna a {
+            color: #ccc;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 10px;
+            transition: var(--transicion);
+        }
+
+        .footer-columna a:hover {
+            color: var(--color-oro);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transicion);
+        }
+
+        .social-links a:hover {
+            background: var(--color-oro);
+            color: var(--color-azul-profundo);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        /* WhatsApp Float */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #25D366;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            box-shadow: 0 5px 20px rgba(37, 211, 102, 0.4);
+            transition: var(--transicion);
+            z-index: 999;
+            text-decoration: none;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            background: #20b859;
+        }
+
+     /* Logo solo imagen - Opción 3 */
+.logo-solo-imagen {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.logo-imagen-principal {
+    height: 80px;
+    width: auto;
+    transition: all 0.3s ease;
+    border-radius: 12px;
+    object-fit: contain;
+}
+
+.logo-imagen-principal:hover {
+    transform: scale(1.05);
+    filter: brightness(1.05);
+}
+
+
+/* Footer y Créditos */
+.copyright {
+    text-align: center;
+    padding-top: 20px;
+    margin-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.copyright p {
+    color: #888;
+    font-size: 0.85rem;
+    margin-bottom: 15px;
+}
+
+.creditos-contenido {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 0.85rem;
+    color: #888;
+}
+
+.creditos-texto {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: #888;
+}
+
+.creditos-link {
+    color: var(--color-oro);
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+}
+
+.creditos-link:hover {
+    color: white;
+    text-decoration: underline;
+}
+
+.sr {
+    color: white;
+    font-weight: 400;
+}
+
+.creditos-separador {
+    width: 4px;
+    height: 4px;
+    background: var(--color-oro);
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.creditos-frase {
+    color: var(--color-oro);
+    font-style: italic;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+}
+
+/* Footer Social Icons - Versión Bonita */
+.footer-social {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.social-links-footer {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    flex-wrap: wrap;
+}
+
+.social-icon {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 50px;
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+}
+
+.social-icon i {
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+}
+
+.social-icon span {
+    font-size: 0.85rem;
+}
+
+.social-icon:hover {
+    transform: translateY(-3px);
+    gap: 12px;
+}
+
+.social-icon.facebook:hover {
+    background: #1877F2;
+    box-shadow: 0 5px 15px rgba(24, 119, 242, 0.4);
+}
+
+.social-icon.instagram:hover {
+    background: linear-gradient(45deg, #f09433, #d62976, #962fbf);
+    box-shadow: 0 5px 15px rgba(214, 41, 118, 0.4);
+}
+
+.social-icon:hover i {
+    transform: scale(1.1);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .social-icon {
+        padding: 8px 16px;
+    }
+    
+    .social-icon span {
+        display: none;
+    }
+    
+    .social-icon {
+        width: 45px;
+        height: 45px;
+        padding: 0;
+        justify-content: center;
+        border-radius: 50%;
+    }
+    
+    .social-icon i {
+        font-size: 1.2rem;
+        margin: 0;
+    }
+}
+
+
+/* Responsive para móviles */
+@media (max-width: 768px) {
+    .creditos-contenido {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .creditos-separador {
+        display: none;
+    }
+    
+    .copyright p {
+        font-size: 0.75rem;
+    }
+    
+    .creditos-texto,
+    .creditos-frase {
+        font-size: 0.75rem;
+    }
+}
+
+/* Responsive para móviles */
+@media (max-width: 768px) {
+    .logo-imagen-principal {
+        height: 65px;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo-imagen-principal {
+        height: 55px;
+    }
+}
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .hero-contenido, .contacto-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .badges {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background: var(--color-blanco);
+                flex-direction: column;
+                align-items: center;
+                padding: 30px 20px;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+                display: none;
+                z-index: 999;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .menu-movil {
+                display: block;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .foto-contenedor {
+                width: 280px;
+                height: 280px;
+            }
+
+            section {
+                padding: 60px 0;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .foto-contenedor {
+                width: 250px;
+                height: 250px;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+
+        .idioma-toggle {
+            display: flex;
+            gap: 5px;
+            margin-left: 20px;
+        }
+
+        .idioma-btn {
+            background: none;
+            border: 1px solid var(--color-oro);
+            color: var(--color-oro);
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: var(--transicion);
+        }
+
+        .idioma-btn.active {
+            background: var(--color-oro);
+            color: white;
+        }
+
+        [data-es] .en-only {
+            display: none;
+        }
+
+        [data-en] .es-only {
+            display: none;
+        }
+    </style>
+</head>
+<body data-lang="es">
+    <!-- WhatsApp Float -->
+    <a href="https://wa.me/17276865101" class="whatsapp-float" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- Navegación -->
+    <nav class="navegacion">
+        <div class="contenedor nav-contenedor">
+            <a href="#inicio" class="logo-solo-imagen">
+    <img src="logo.jpg" alt="1st Investment Realty Group" class="logo-imagen-principal">
+</a>
+            <ul class="nav-links">
+                <li><a href="#inicio" data-es="Inicio" data-en="Home">Inicio</a></li>
+                <li><a href="#servicios" data-es="Servicios" data-en="Services">Servicios</a></li>
+                <li><a href="#propiedades" data-es="Propiedades" data-en="Properties">Propiedades</a></li>
+                <li><a href="#testimonios" data-es="Testimonios" data-en="Testimonials">Testimonios</a></li>
+                <li><a href="#contacto" data-es="Contacto" data-en="Contact">Contacto</a></li>
+            </ul>
+            <div class="idioma-toggle">
+                <button class="idioma-btn active" data-lang="es">ES</button>
+                <button class="idioma-btn" data-lang="en">EN</button>
+            </div>
+            <button class="menu-movil"><i class="fas fa-bars"></i></button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="hero">
+        <div class="contenedor hero-contenido">
+            <div class="hero-texto">
+                <h1>
+                    <span data-es="¿Quieres comprar, vender o invertir" data-en="Ready to buy, sell, or invest"></span><br>
+                    <span class="destacado" data-es="en bienes raíces?" data-en="in real estate?">¿Quieres comprar, vender o invertir en bienes raíces?</span>
+                </h1>
+                <p class="subtitulo" data-es="No pierdas dinero ni tiempo. Déjalo en manos de una profesional." data-en="Stop waiting. Stop guessing. Let a professional handle it.">
+                    No pierdas dinero ni tiempo. Déjalo en manos de una profesional.
+                </p>
+                <div class="badges">
+                    <span class="badge"><i class="fas fa-check-circle"></i> Licensed Realtor</span>
+                    <span class="badge"><i class="fas fa-dollar-sign"></i> Best Investment Deals</span>
+                    <span class="badge"><i class="fas fa-language"></i> English / Español</span>
+                </div>
+                <div class="hero-botones" style="margin-top: 30px;">
+                    <a href="#contacto" class="btn btn-primario">
+                        <i class="fas fa-paper-plane"></i> <span data-es="Contáctame" data-en="Contact Me">Contáctame</span>
+                    </a>
+                    <a href="tel:+17276865101" class="btn btn-secundario">
+                        <i class="fas fa-phone-alt"></i> <span data-es="Llamar ahora" data-en="Call Now">Llamar ahora</span>
+                    </a>
+                </div>
+            </div>
+            <div class="hero-imagen">
+                <div class="foto-contenedor">
+                    <div class="foto-marco"></div>
+                    <img src="eliza.jpg" alt="Elizabeth Avila Ricardo - Realtor" class="foto-perfil">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="stats">
+        <div class="contenedor">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h3>100+</h3>
+                    <p data-es="Propiedades vendidas" data-en="Properties Sold">Propiedades vendidas</p>
+                </div>
+                <div class="stat-item">
+                    <h3>50+</h3>
+                    <p data-es="Inversores satisfechos" data-en="Happy Investors">Inversores satisfechos</p>
+                </div>
+                <div class="stat-item">
+                    <h3>10+</h3>
+                    <p data-es="Años de experiencia" data-en="Years Experience">Años de experiencia</p>
+                </div>
+                <div class="stat-item">
+                    <h3>24/7</h3>
+                    <p data-es="Asesoría disponible" data-en="Support Available">Asesoría disponible</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Servicios -->
+    <section id="servicios">
+        <div class="contenedor">
+            <h2 data-es="Mis Servicios" data-en="My Services">Mis Servicios</h2>
+            <div class="servicios-grid">
+                <div class="servicio-card">
+                    <div class="servicio-icono"><i class="fas fa-home"></i></div>
+                    <h3 data-es="Compra de Propiedades" data-en="Buy Properties">Compra de Propiedades</h3>
+                    <p data-es="Encuentro la casa perfecta para ti y tu familia, con las mejores condiciones del mercado." data-en="Find the perfect home for you and your family with the best market conditions.">
+                        Encuentro la casa perfecta para ti y tu familia.
+                    </p>
+                </div>
+                <div class="servicio-card">
+                    <div class="servicio-icono"><i class="fas fa-chart-line"></i></div>
+                    <h3 data-es="Venta Rápida" data-en="Fast Selling">Venta Rápida</h3>
+                    <p data-es="Vende tu propiedad al mejor precio y en el menor tiempo posible." data-en="Sell your property at the best price in the shortest time possible.">
+                        Vende tu propiedad al mejor precio y en el menor tiempo.
+                    </p>
+                </div>
+                <div class="servicio-card">
+                    <div class="servicio-icono"><i class="fas fa-coins"></i></div>
+                    <h3 data-es="Inversiones" data-en="Investments">Inversiones</h3>
+                    <p data-es="Asesoría profesional para invertir en bienes raíces con alto retorno." data-en="Professional advice for real estate investments with high returns.">
+                        Asesoría para invertir en bienes raíces con alto retorno.
+                    </p>
+                </div>
+                <div class="servicio-card">
+                    <div class="servicio-icono"><i class="fas fa-file-signature"></i></div>
+                    <h3 data-es="Asesoría Legal" data-en="Legal Advice">Asesoría Legal</h3>
+                    <p data-es="Acompañamiento en todo el proceso legal de tu transacción inmobiliaria." data-en="Support throughout the legal process of your real estate transaction.">
+                        Acompañamiento legal en toda tu transacción.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Propiedades Destacadas -->
+    <section id="propiedades" style="background: var(--color-gris);">
+        <div class="contenedor">
+            <h2 data-es="Propiedades Destacadas" data-en="Featured Properties">Propiedades Destacadas</h2>
+            <div class="propiedades-grid" id="propiedades-grid">
+                <!-- Las propiedades se cargarán con JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonios -->
+    <section id="testimonios">
+        <div class="contenedor">
+            <h2 data-es="Lo que dicen mis clientes" data-en="What My Clients Say">Lo que dicen mis clientes</h2>
+            <div class="testimonios-grid">
+                <div class="testimonio-card">
+                    <p class="testimonio-texto">"Elizabeth nos ayudó a encontrar nuestra casa soñada en Tampa. Su profesionalismo y dedicación fueron excepcionales. ¡100% recomendada!"</p>
+                    <p class="testimonio-autor">- María G. <br><small>Tampa, FL</small></p>
+                </div>
+                <div class="testimonio-card">
+                    <p class="testimonio-texto">"Invertí en una propiedad gracias a su asesoría y hoy tengo un retorno increíble. Sabe mucho del mercado y siempre está disponible."</p>
+                    <p class="testimonio-autor">- Carlos R. <br><small>Inversor</small></p>
+                </div>
+                <div class="testimonio-card">
+                    <p class="testimonio-texto">"Vendí mi casa en menos de un mes. Su estrategia de marketing y negociación fueron clave. ¡Gracias Elizabeth!"</p>
+                    <p class="testimonio-autor">- Jennifer L. <br><small>St. Petersburg, FL</small></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contacto -->
+    <section id="contacto" style="background: var(--color-gris);">
+        <div class="contenedor">
+            <h2 data-es="Contáctame" data-en="Contact Me">Contáctame</h2>
+            <div class="contacto-grid">
+                <div class="info-contacto">
+                    <h3 data-es="Información de Contacto" data-en="Contact Information">Información de Contacto</h3>
+                    <div class="info-item">
+                        <div class="info-icono"><i class="fas fa-phone-alt"></i></div>
+                        <div class="info-texto">
+                            <h4 data-es="Teléfono" data-en="Phone">Teléfono</h4>
+                            <a href="tel:+17276865101">(727) 686-5101</a>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icono"><i class="fas fa-envelope"></i></div>
+                        <div class="info-texto">
+                            <h4>Email</h4>
+                            <a href="mailto:elizaavilarealtor@gmail.com">elizaavilarealtor@gmail.com</a>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icono"><i class="fas fa-building"></i></div>
+                        <div class="info-texto">
+                            <h4 data-es="Oficina" data-en="Office">Oficina</h4>
+                            <p>1st Investment Realty Group</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icono"><i class="fas fa-map-marker-alt"></i></div>
+                        <div class="info-texto">
+                            <h4 data-es="Dirección" data-en="Address">Dirección</h4>
+                            <p>5511 Hanley Rd, Tampa, FL 33634</p>
+                        </div>
+                    </div>
+  
+                </div>
+                
+                <div class="form-contacto">
+                    <form id="contactForm" action="https://formsubmit.co/elizaavilarealtor@gmail.com" method="POST">
+                        <input type="hidden" name="_subject" value="Nuevo contacto - Bienes Raíces">
+                        <input type="hidden" name="_captcha" value="false">
+                        <input type="hidden" name="_template" value="table">
+                        <input type="hidden" name="_next" value="gracias.html">
+                        
+                        <div class="form-grupo">
+                            <label data-es="Nombre completo" data-en="Full Name">Nombre completo *</label>
+                            <input type="text" name="nombre" required>
+                        </div>
+                        <div class="form-grupo">
+                            <label>Email *</label>
+                            <input type="email" name="email" required>
+                        </div>
+                        <div class="form-grupo">
+                            <label data-es="Teléfono" data-en="Phone">Teléfono</label>
+                            <input type="tel" name="telefono">
+                        </div>
+                        <div class="form-grupo">
+                            <label data-es="Tipo de interés" data-en="Interest Type">Tipo de interés *</label>
+                            <select name="interes" required>
+                                <option value="" disabled selected data-es="Selecciona una opción" data-en="Select an option">Selecciona una opción</option>
+                                <option value="comprar" data-es="Comprar propiedad" data-en="Buy property">Comprar propiedad</option>
+                                <option value="vender" data-es="Vender propiedad" data-en="Sell property">Vender propiedad</option>
+                                <option value="invertir" data-es="Invertir" data-en="Invest">Invertir</option>
+                                <option value="asesoria" data-es="Asesoría" data-en="Consultation">Asesoría</option>
+                            </select>
+                        </div>
+                        <div class="form-grupo">
+                            <label data-es="Mensaje" data-en="Message">Mensaje *</label>
+                            <textarea name="mensaje" rows="4" required data-es-placeholder="Cuéntame sobre lo que buscas..." data-en-placeholder="Tell me what you're looking for..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primario" style="width: 100%;">
+                            <i class="fas fa-paper-plane"></i> <span data-es="Enviar mensaje" data-en="Send Message">Enviar mensaje</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mapa -->
+    <section style="padding: 0;">
+        <div id="mapa"></div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="contenedor">
+            <div class="footer-contenido">
+                <div class="footer-columna">
+                    <h4>1st Investment Realty Group</h4>
+                    <p data-es="Tu socio confiable en bienes raíces en Florida" data-en="Your trusted real estate partner in Florida">
+                        Tu socio confiable en bienes raíces en Florida
+                    </p>
+                </div>
+                <div class="footer-columna">
+                    <h4 data-es="Enlaces rápidos" data-en="Quick Links">Enlaces rápidos</h4>
+                    <a href="#inicio" data-es="Inicio" data-en="Home">Inicio</a>
+                    <a href="#servicios" data-es="Servicios" data-en="Services">Servicios</a>
+                    <a href="#propiedades" data-es="Propiedades" data-en="Properties">Propiedades</a>
+                    <a href="#contacto" data-es="Contacto" data-en="Contact">Contacto</a>
+                </div>
+
+                <div class="footer-social">
+    <div class="social-links-footer">
+        <a href="https://facebook.com/vladi.eliza.cancio" target="_blank" class="social-icon facebook" rel="noopener noreferrer">
+            <i class="fab fa-facebook-f"></i>
+            <span>Facebook</span>
+        </a>
+        <a href="https://instagram.com/eliza_avila_realtor" target="_blank" class="social-icon instagram" rel="noopener noreferrer">
+            <i class="fab fa-instagram"></i>
+            <span>Instagram</span>
+        </a>
+    </div>
+</div>
+                <div class="footer-columna">
+                    <h4 data-es="Horario" data-en="Hours">Horario</h4>
+                    <p data-es="Lunes a Viernes: 9am - 7pm" data-en="Monday to Friday: 9am - 7pm">Lunes a Viernes: 9am - 7pm</p>
+                    <p data-es="Sábados: 10am - 4pm" data-en="Saturdays: 10am - 4pm">Sábados: 10am - 4pm</p>
+                    <p data-es="Domingos: Con cita previa" data-en="Sundays: By appointment">Domingos: Con cita previa</p>
+                </div>
+            </div>
+            <div class="copyright">
+            <p>&copy; 2026 1st Investment Realty Group - Elizabeth Avila Ricardo.</p>
+            <div class="creditos-contenido">
+                <span class="creditos-texto">
+                    <span data-es="Página creada por" data-en="Website created by">Página creada por</span> &nbsp;
+                    <a href="https://sromlet.github.io" target="_blank" class="creditos-link">
+                        <span class="sr">SR</span>omlet
+                    </a>
+                </span>
+                <span class="creditos-separador"></span>
+                <span class="creditos-frase" data-es="Entregando las llaves de hogares digitales" data-en="Delivering the keys to digital homes">
+                    Entregando las llaves de hogares digitales
+                </span>
+            </div>
+        </div>
+    </div>
+</footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Menú móvil
+        document.querySelector('.menu-movil').addEventListener('click', function() {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.classList.toggle('active');
+            
+            const icono = this.querySelector('i');
+            if (navLinks.classList.contains('active')) {
+                icono.classList.remove('fa-bars');
+                icono.classList.add('fa-times');
+            } else {
+                icono.classList.remove('fa-times');
+                icono.classList.add('fa-bars');
+            }
+        });
+
+        // Cerrar menú al hacer clic en enlace
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', function() {
+                if (window.innerWidth <= 768) {
+                    document.querySelector('.nav-links').classList.remove('active');
+                    document.querySelector('.menu-movil i').classList.remove('fa-times');
+                    document.querySelector('.menu-movil i').classList.add('fa-bars');
+                }
+            });
+        });
+
+        // Scroll suave
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('.navegacion');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Propiedades destacadas (mock data)
+        const propiedades = [
+            {
+                imagen: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=500",
+                precio: "$450,000",
+                titulo: "Moderna Casa Familiar",
+                ubicacion: "Tampa, FL 33614",
+                habitaciones: 4,
+                banos: 3,
+                area: "2,400 sqft"
+            },
+            {
+                imagen: "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=500",
+                precio: "$325,000",
+                titulo: "Townhouse en Comunidad Privada",
+                ubicacion: "St. Petersburg, FL",
+                habitaciones: 3,
+                banos: 2,
+                area: "1,800 sqft"
+            },
+            {
+                imagen: "https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=500",
+                precio: "$675,000",
+                titulo: "Propiedad de Inversión",
+                ubicacion: "Clearwater, FL",
+                habitaciones: 5,
+                banos: 4,
+                area: "3,200 sqft"
+            }
+        ];
+
+        const propiedadesGrid = document.getElementById('propiedades-grid');
+        if (propiedadesGrid) {
+            propiedades.forEach(prop => {
+                const card = document.createElement('div');
+                card.className = 'propiedad-card';
+                card.innerHTML = `
+                    <div class="propiedad-imagen" style="background-image: url('${prop.imagen}')">
+                        <div class="propiedad-precio">${prop.precio}</div>
+                    </div>
+                    <div class="propiedad-info">
+                        <h3>${prop.titulo}</h3>
+                        <div class="propiedad-ubicacion"><i class="fas fa-map-marker-alt"></i> ${prop.ubicacion}</div>
+                        <div class="propiedad-caracteristicas">
+                            <span><i class="fas fa-bed"></i> ${prop.habitaciones} beds</span>
+                            <span><i class="fas fa-bath"></i> ${prop.banos} baths</span>
+                            <span><i class="fas fa-arrows-alt"></i> ${prop.area}</span>
+                        </div>
+                    </div>
+                `;
+                propiedadesGrid.appendChild(card);
+            });
+        }
+
+        // Mapa
+        const map = L.map('mapa').setView([28.0095, -82.5734], 13);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+        }).addTo(map);
+        
+        L.marker([28.0095, -82.5734]).addTo(map)
+            .bindPopup('<b>1st Investment Realty Group</b><br>5511 Hanley Rd, Tampa, FL 33634')
+            .openPopup();
+
+        // Idioma
+        let currentLang = 'es';
+        
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.body.setAttribute('data-lang', lang);
+            
+            document.querySelectorAll('[data-es], [data-en]').forEach(el => {
+                const text = el.getAttribute(`data-${lang}`);
+                if (text) {
+                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                        const placeholder = el.getAttribute(`data-${lang}-placeholder`);
+                        if (placeholder) el.placeholder = placeholder;
+                    } else {
+                        el.textContent = text;
+                    }
+                }
+            });
+            
+            document.querySelectorAll('.idioma-btn').forEach(btn => {
+                if (btn.getAttribute('data-lang') === lang) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+        
+        document.querySelectorAll('.idioma-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                setLanguage(btn.getAttribute('data-lang'));
+            });
+        });
+
+        // Formulario
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+            submitBtn.disabled = true;
+            
+            setTimeout(() => {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
