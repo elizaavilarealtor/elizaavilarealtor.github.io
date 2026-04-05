@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mensaje Enviado - Elizabeth Avila Realtor</title>
+    <meta http-equiv="refresh" content="5;url=/index.html">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #1B2B4E 0%, #0F1A2E 100%);
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .mensaje {
+            padding: 50px 40px;
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            max-width: 500px;
+            width: 100%;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .check {
+            font-size: 80px;
+            color: #C6A43F;
+            margin-bottom: 20px;
+            animation: bounce 0.6s ease-out;
+        }
+
+        @keyframes bounce {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #C6A43F;
+        }
+
+        .texto-es, .texto-en {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .texto-en {
+            display: none;
+        }
+
+        .redirigiendo {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .idioma-toggle {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .idioma-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid #C6A43F;
+            color: #C6A43F;
+            padding: 8px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .idioma-btn.active {
+            background: #C6A43F;
+            color: #1B2B4E;
+        }
+
+        .idioma-btn:hover {
+            background: #C6A43F;
+            color: #1B2B4E;
+            transform: translateY(-2px);
+        }
+
+        .volver-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 30px;
+            background: #C6A43F;
+            color: #1B2B4E;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .volver-btn:hover {
+            background: #D4B350;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 480px) {
+            .mensaje {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .check {
+                font-size: 60px;
+            }
+        }
+    </style>
+</head>
+<body data-lang="es">
+    <div class="mensaje">
+        <div class="check">✓</div>
+        
+        <div class="texto-es">
+            <h1>¡Mensaje enviado!</h1>
+            <p>Gracias por contactar a Elizabeth Avila.</p>
+            <p>Te responderé lo antes posible.</p>
+        </div>
+        
+        <div class="texto-en">
+            <h1>Message sent!</h1>
+            <p>Thank you for contacting Elizabeth Avila.</p>
+            <p>I will get back to you as soon as possible.</p>
+        </div>
+        
+        <div class="redirigiendo">
+            <span class="texto-es">Redirigiendo a la página principal en 5 segundos...</span>
+            <span class="texto-en">Redirecting to homepage in 5 seconds...</span>
+        </div>
+        
+        <div class="idioma-toggle">
+            <button class="idioma-btn active" data-lang="es">ES</button>
+            <button class="idioma-btn" data-lang="en">EN</button>
+        </div>
+        
+        <a href="/" class="volver-btn">
+            <span class="texto-es">← Volver ahora</span>
+            <span class="texto-en">← Go back now</span>
+        </a>
+    </div>
+
+    <script>
+        let currentLang = 'es';
+        
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.body.setAttribute('data-lang', lang);
+            
+            if (lang === 'es') {
+                document.querySelectorAll('.texto-es').forEach(el => el.style.display = 'block');
+                document.querySelectorAll('.texto-en').forEach(el => el.style.display = 'none');
+            } else {
+                document.querySelectorAll('.texto-es').forEach(el => el.style.display = 'none');
+                document.querySelectorAll('.texto-en').forEach(el => el.style.display = 'block');
+            }
+            
+            document.querySelectorAll('.idioma-btn').forEach(btn => {
+                if (btn.getAttribute('data-lang') === lang) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+        
+        document.querySelectorAll('.idioma-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                setLanguage(btn.getAttribute('data-lang'));
+            });
+        });
+        
+        let segundos = 5;
+        const redirectTimer = setInterval(() => {
+            segundos--;
+            if (segundos <= 0) {
+                clearInterval(redirectTimer);
+                window.location.href = '/';
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
