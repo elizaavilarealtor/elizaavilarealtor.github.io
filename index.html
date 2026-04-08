@@ -1459,12 +1459,100 @@ setLanguage('es');
             }, 3000);
         });
 
-        document.addEventListener('dragstart', function(e) {
-        if (e.target.tagName === 'IMG') {
+          // Protección de contenido
+function protegerContenido() {
+    // Desactivar clic derecho en toda la página
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        mostrarAlerta();
+        return false;
+    });
+    
+    // Desactivar atajos de teclado para copiar
+    document.addEventListener('keydown', function(e) {
+        // Ctrl+C, Ctrl+X, Ctrl+V, Ctrl+U, Ctrl+S, F12
+        if (e.ctrlKey && (e.key === 'c' || e.key === 'x' || e.key === 'v' || e.key === 'u' || e.key === 's')) {
             e.preventDefault();
+            mostrarAlerta();
+            return false;
+        }
+        
+        // Tecla F12 (herramientas de desarrollador)
+        if (e.key === 'F12') {
+            e.preventDefault();
+            mostrarAlerta();
             return false;
         }
     });
+    
+    // Proteger imágenes individualmente
+    document.querySelectorAll('img').forEach(img => {
+        img.setAttribute('draggable', 'false');
+        img.addEventListener('dragstart', function(e) {
+            e.preventDefault();
+            return false;
+        });
+    });
+    
+    // Prevenir selección de texto con CSS (fallback)
+    document.body.style.userSelect = 'none';
+    document.body.style.webkitUserSelect = 'none';
+    document.body.style.msUserSelect = 'none';
+}
+
+// Función para mostrar alerta personalizada
+function mostrarAlerta() {
+    // Crear un elemento de alerta flotante
+    const alerta = document.createElement('div');
+    alerta.innerHTML = `
+        <div style="
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--color-azul-profundo);
+            color: var(--color-oro);
+            padding: 15px 25px;
+            border-radius: 10px;
+            z-index: 9999;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 0.9rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            border-left: 4px solid var(--color-oro);
+            animation: slideIn 0.3s ease;
+        ">
+            <i class="fas fa-lock" style="margin-right: 10px;"></i>
+            Contenido protegido © ${new Date().getFullYear()}
+        </div>
+    `;
+    
+    document.body.appendChild(alerta);
+    
+    // Agregar animación CSS si no existe
+    if (!document.querySelector('#alerta-style')) {
+        const style = document.createElement('style');
+        style.id = 'alerta-style';
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100px); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100px); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    setTimeout(() => {
+        alerta.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => alerta.remove(), 300);
+    }, 2000);
+}
+
+// Inicializar protección cuando la página cargue
+document.addEventListener('DOMContentLoaded', protegerContenido);
+  
     </script>
 </body>
 </html>
